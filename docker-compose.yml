@@ -16,8 +16,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.4"
-          memory: "160MB"
+          cpus: "0.35"
+          memory: "165MB"
 
   api2:
     image: mxlange/rinha-go-ivf:v0.0.1
@@ -36,8 +36,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.4"
-          memory: "160MB"
+          cpus: "0.35"
+          memory: "165MB"
 
   nginx:
     image: nginx:1.27-alpine
@@ -55,5 +55,5 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.2"
-          memory: "30MB"
+          cpus: "0.3"
+          memory: "20MB"
