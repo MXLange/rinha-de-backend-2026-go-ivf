@@ -1,0 +1,59 @@
+services:
+  api1:
+    image: mxlange/rinha-go-ivf:v0.0.1
+    platform: linux/amd64
+    environment:
+      RESOURCES_DIR: /app/resources
+      LISTEN_ADDR: ":8080"
+      NPROBE: "24"
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "wget -q --spider http://127.0.0.1:8080/ready" ]
+      interval: 10s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: "0.4"
+          memory: "160MB"
+
+  api2:
+    image: mxlange/rinha-go-ivf:v0.0.1
+    platform: linux/amd64
+    environment:
+      RESOURCES_DIR: /app/resources
+      LISTEN_ADDR: ":8080"
+      NPROBE: "24"
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "wget -q --spider http://127.0.0.1:8080/ready" ]
+      interval: 10s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: "0.4"
+          memory: "160MB"
+
+  nginx:
+    image: nginx:1.27-alpine
+    platform: linux/amd64
+    depends_on:
+      api1:
+        condition: service_healthy
+      api2:
+        condition: service_healthy
+    ports:
+      - "9999:9999"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: "0.2"
+          memory: "30MB"
